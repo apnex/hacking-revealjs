@@ -198,29 +198,20 @@ window.onfocus = function() {
 	afocus.fill = colours['mLight-Green-300'];
 	afocus.stroke = colours['mLight-Green-500'];
 };
-window.onload = function() {
-	console.log('slide:onload');
-	//window.focus();
-};
-
 window.addEventListener("message", function(e) {
 	if(e.data == 'slide:start') {
 		console.log('slide:start');
-		console.log(this);
 		setTimeout(() => {
 			window.focus();
-			console.log('focus set after 100');
 		}, 100);
 	}
 }, false);
-
 window.addEventListener("keyup", function(e) {
 	console.log('key: ' + e.keyCode);
 	pathArray.forEach((mypath) => {
 		mypath.stroke = colours['mOrange-400'];
 	});
-	if(e.keyCode === keys.right) {
-		// works perfectly to refocus on parent!
+	if(e.keyCode === keys.right) { // refocus parent
 		afocus.fill = colours['mRed-100'];
 		afocus.stroke = colours['mRed-400'];
 		window.parent.focus();
