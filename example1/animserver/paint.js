@@ -24,7 +24,6 @@ function paint() {
 
 	my.makePath = makePath;
 	my.addPath = addPath;
-	my.addIcon = addIcon;
 
 	return my;
 }
@@ -90,17 +89,11 @@ function addPath(points, o, s, scale) {
 	let pGroup = new Two.Group();
         let path = new Two.Path(a.toAnchors(newPoints, 1), false, false, true);
 	path.linewidth = style.linewidth;
-	path.stroke = style.stroke;
-	path.fill = style.fill;
-	path.cap = 'round';
-	if(opt.id) {
-		path.id = opt.id;
-	}
-	path.cap = 'round';
-	//path.dashes[0] = style.dashes; // testing
-
-	/*
+        path.stroke = style.stroke;
+        path.fill = style.fill;
+	path.dashes[0] = style.dashes; // testing
 	pGroup.add(path);
+
 	if(opt.start) {
 		let icon = opt.start.clone()
 		icon.translation.set(newPoints[0].x, newPoints[0].y);
@@ -111,10 +104,8 @@ function addPath(points, o, s, scale) {
 		icon.translation.set(newPoints[newPoints.length - 1].x, newPoints[newPoints.length - 1].y);
 		pGroup.add(icon);
 	}
-	return pGroup;
-	*/
 
-	return path;
+	return pGroup;
 }
 
 // show handles
@@ -153,16 +144,4 @@ function showHandles(points, opt, scale) {
 	handleGroup.add(rGroup);
 	handleGroup.add(hGroup);
 	return handleGroup;
-}
-
-function addIcon(grid, icon, tags = []) {
-	let group = [];
-	tags.forEach((tag) => {
-		grid.getTags(tag).forEach((cell) => {
-			let symbol = icon.clone();
-			symbol.translation.set(cell.x, cell.y);
-			group.push(symbol);
-		});
-	});
-	return group;
 }

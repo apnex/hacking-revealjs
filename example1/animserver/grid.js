@@ -8,7 +8,6 @@ function grid() {
 		y: 0
 	};
 	let pMap = {};
-	let pMaps = {};
 	let pBody = [];
 	let painter = paint();
 
@@ -18,10 +17,6 @@ function grid() {
 			row.forEach((cell, x) => {
 				if(cell > 0) {
 					pMap[cell] = {x, y};
-					if(typeof(pMaps[cell]) === 'undefined') {
-						pMaps[cell] = [];
-					}
-					pMaps[cell].push({x, y});
 				}
 			});
 		});
@@ -33,10 +28,6 @@ function grid() {
 
 	my.addPath = (points, opts, style) => {
 		return painter.addPath(my.points(points)[0], opts, style, scale);
-	};
-
-	my.addIcon = (icon, tags) => {
-		return painter.addIcon(my, icon, tags);
 	};
 
 	my.makePath = (points, opts, style) => {
@@ -63,16 +54,6 @@ function grid() {
 
 	my.getTag = (tag) => {
 		return my.at(pMap[tag].x, pMap[tag].y);
-	};
-
-	my.getTags = (tag) => {
-		if(pMaps[tag]) {
-			return pMaps[tag].map((cell) => {
-				return my.at(cell.x, cell.y);
-			});
-		} else {
-			return [];
-		}
 	};
 
 	my.painter = function(value) {

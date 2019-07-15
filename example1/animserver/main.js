@@ -7,78 +7,53 @@ var two = new Two({
 const a = anchor();
 let aGrid = grid();
 aGrid([
-	[5,0,8,0,10,0,13],
-	[1,0,2,9,3,0,4],
-	[6,0,7,0,11,0,12]
+	[0,0,0,0,0,0,0],
+	[0,1,0,0,0,4,0],
+	[0,2,0,9,0,5,0],
+	[0,3,0,0,0,6,0],
+	[0,0,0,0,0,0,0]
 ]);
 aGrid.x(100);
-aGrid.y(100);
+aGrid.y(80);
 aGrid.offset(aGrid.get(9)); // obtain center coord
+
+let icons = new Two.Group();
+let iconArray = [
+	server(),
+	server(),
+	server(),
+	server(),
+	server(),
+	server()
+];
 
 // set main
 let main = new Two.Group();
+let iconRenderingGroup = new Two.Group();
+let iconGroup = new Two.Group();
 main.translation.set(two.width / 2, two.height / 2);
 //main.add(aGrid.show());
-let pathGroup = new Two.Group();
-let iconGroup = new Two.Group();
-let iconRenderingGroup = new Two.Group();
-main.add(pathGroup);
 main.add(iconGroup);
 main.add(iconRenderingGroup);
 two.add(main);
 
-// timeline
-let timeline = [
-	{
-		action: 'show',
-		tags: [1],
-		icon: loadbalancer()
-	},
-	{
-		action: 'show',
-		tags: [2],
-		icon: router()
-	},
-	{
-		action: 'show',
-		tags: [3],
-		icon: firewall()
-	},
-	{
-		action: 'show',
-		tags: [4],
-		icon: netswitch()
-	},
-	{
-		action: 'trace',
-		tags: ['moo']
-	},
-];
-
-[
-	[5, 6, 7, 8, 10, 11, 12, 13]
-].forEach((link) => {
-	pathGroup.add(aGrid.addPath(link, {
-		id: 'moo',
-		close: 1,
-		radius: 40
-	}, {
-		linewidth: 20
-	}));
-});
-
-function placeIcon(icon, tags) {
-	aGrid.addIcon(icon, tags).forEach((sym) => {
-		sym.scale = 0;
-		iconRenderingGroup.add(sym);
+function makeIcon(icon, tags) {
+	tags.forEach((tag) => {
+		let p = aGrid.getTag(tag);
+		// return array?
+		let symbol = icon.clone();
+		symbol.translation.set(p.x, p.y);
+		symbol.scale = 0;
+		iconRenderingGroup.add(symbol);
 	});
 }
 
-// key controls
-two.update();
+// focus indicator
 var afocus = two.makeRoundedRectangle(20, 20, 20, 20, 4);
 afocus.fill = colours['mRed-100'];
 afocus.stroke = colours['mRed-400'];
+afocus.linewidth = 2;
+
 var keys = {
 	'left': 37,
 	'up': 38,
@@ -100,7 +75,7 @@ window.addEventListener("message", function(e) {
 	}
 }, false);
 
-var idx = 0;
+var visible = 0;
 window.addEventListener("keyup", function(e) {
 	console.log('key: ' + e.keyCode);
 	if(e.keyCode === keys.right) { // refocus parent
@@ -109,21 +84,10 @@ window.addEventListener("keyup", function(e) {
 		window.parent.focus();
 	}
 	if(e.keyCode === keys.left) {
-		if(idx < timeline.length) { // show next item
-			console.log('group: ' +  idx);
-			switch(timeline[idx].action) {
-				case('show'):
-					placeIcon(timeline[idx].icon, timeline[idx].tags);
-				break;
-				case('trace'):
-					timeline[idx].tags.forEach((tag) => {
-						let orig = document.getElementById(tag);
-						let myanim = new animate(orig);
-						myanim.startDrawingPath();
-					});
-				break;
-			}
-			idx++;
+		if(visible < iconArray.length) { // show next icon
+			console.log('group: ' +  visible);
+			makeIcon(iconArray[visible], [visible + 1]);
+			visible++;
 		} else {
 			resetTimeline();
 		}
@@ -135,16 +99,17 @@ function resetTimeline() {
 		console.log('Waiting for remaining rendering..');
 	} else {
 		Object.values(iconGroup.children.ids).forEach((icon) => {
+		//iconGroup.children.forEach((icon) => { // broken
 			icon.remove();
 		});
-		idx = 0;
+		visible = 0;
 	}
 }
 
 // render Loop
 two.bind('update', (frameCount) => {
 	let newIcons = iconRenderingGroup.children;
-	let end = 0.3;
+	let end = 0.2;
 	if(newIcons.length > 0) {
 		console.log('iconlength: ' + newIcons.length);
 		newIcons.forEach((icon) => {
