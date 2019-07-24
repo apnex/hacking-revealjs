@@ -146,7 +146,6 @@ two.bind('update', (frameCount) => {
 	let newIcons = iconRenderingGroup.children;
 	let end = 0.3;
 	if(newIcons.length > 0) {
-		console.log('iconlength: ' + newIcons.length);
 		newIcons.forEach((icon) => {
 			if(icon.scale < (end - 0.001)) {
 				icon.scale += (end - icon.scale) * 0.125;

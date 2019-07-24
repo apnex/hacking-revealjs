@@ -86,7 +86,7 @@ placeIcon(nbm, [6]);
 placeIcon(rt, [22]);
 
 // bug: if tag not exist - whole image errors - add handling
-placeIcon(textBlock('NSX', {
+placeIcon(textBlock('SEC', {
 	fill: colours['mWhite'],
 	size: 50
 }, {}), [21]);
