@@ -65,14 +65,15 @@ function container() {
 	let p = myGrid.getTag(9);
 	let atext = new Two.Text('app', p.x, p.y);
 	atext.fill = colours['mWhite'];
-	atext.stroke = colours['mRed-900'];
-	atext.linewidth = 6;
+	//atext.stroke = colours['mRed-900'];
+	//atext.linewidth = 1;
 	atext.weight = 900;
 	//atext.family = 'Courier New, Courier, monospace';
-	atext.family = 'monospace, monospace';
+	//atext.family = 'monospace, monospace';
+	atext.family = 'Arial, Helvetica, sans-serif';
 	atext.baseline = 'middle';
 	atext.alignment = 'center';
-	atext.size = 160;
+	atext.size = 120;
 	symbol.add(atext);
 
 	// draw paths
